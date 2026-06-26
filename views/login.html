@@ -12,9 +12,28 @@
 </head>
 <body class="login-body">
 
+    <!-- Fond animé -->
+    <div class="bg-anim">
+        <div class="bg-grid"></div>
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+        <canvas id="particles"></canvas>
+    </div>
+
     <div class="login-wrapper">
 
+        <!-- Avatar avec anneau lumineux -->
+        <div class="avatar-ring">
+            <div class="avatar">
+                <i class="fa-regular fa-user"></i>
+            </div>
+        </div>
+
         <div class="login-card">
+
+            <h2 class="login-title">Bienvenue</h2>
+            <p class="login-subtitle">Connectez-vous à votre espace</p>
 
             <form method="POST" action="/login">
 
@@ -22,7 +41,6 @@
                     <div class="icon">
                         <i class="fa-solid fa-user"></i>
                     </div>
-
                     <input
                         type="text"
                         name="username"
@@ -35,13 +53,17 @@
                     <div class="icon">
                         <i class="fa-solid fa-lock"></i>
                     </div>
-
                     <input
                         type="password"
                         name="password"
+                        id="password"
                         placeholder="Mot de passe"
                         required
                         autocomplete="current-password">
+                    <button type="button" class="toggle-pwd" aria-label="Afficher le mot de passe">
+                        <i class="fa-regular fa-eye"></i>
+                        <i class="fa-regular fa-eye-slash" style="display:none"></i>
+                    </button>
                 </div>
 
                 <div class="options">
@@ -50,13 +72,12 @@
                         <span>Se souvenir de moi</span>
                     </label>
 
-                    <a href="#">
-                        Mot de passe oublié ?
-                    </a>
+                    <a href="/reset-password">Mot de passe oublié ?</a>
                 </div>
 
                 <button type="submit" class="login-btn">
-                    CONNEXION
+                    <span>CONNEXION</span>
+                    <i class="fa-solid fa-arrow-right"></i>
                 </button>
 
             </form>
@@ -64,10 +85,77 @@
         </div>
 
         <div class="server-info">
-            Ubuntu 26.04 • Node.js + Nginx • UFW + Tailscale
+            <i class="fa-solid fa-shield-halved"></i>
+            Ubuntu 26.04 · Node.js + Nginx · UFW + Tailscale
         </div>
 
     </div>
+
+    <script src="/widgets.js"></script>
+    <script>
+        // Toggle password
+        document.querySelector('.toggle-pwd')?.addEventListener('click', function() {
+            const inp = document.getElementById('password');
+            const eyeOpen = this.querySelector('.fa-eye');
+            const eyeClosed = this.querySelector('.fa-eye-slash');
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                eyeOpen.style.display = 'none';
+                eyeClosed.style.display = 'inline';
+            } else {
+                inp.type = 'password';
+                eyeOpen.style.display = 'inline';
+                eyeClosed.style.display = 'none';
+            }
+        });
+
+        // Particles animées
+        (function() {
+            const canvas = document.getElementById('particles');
+            const ctx = canvas.getContext('2d');
+            let w, h, particles = [];
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            class Particle {
+                constructor() { this.reset(); }
+                reset() {
+                    this.x = Math.random() * w;
+                    this.y = Math.random() * h;
+                    this.r = Math.random() * 2 + 0.5;
+                    this.dx = (Math.random() - 0.5) * 0.3;
+                    this.dy = (Math.random() - 0.5) * 0.3;
+                    this.opacity = Math.random() * 0.4 + 0.1;
+                }
+                update() {
+                    this.x += this.dx;
+                    this.y += this.dy;
+                    if (this.x < 0 || this.x > w) this.dx *= -1;
+                    if (this.y < 0 || this.y > h) this.dy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < 40; i++) particles.push(new Particle());
+
+            function animate() {
+                ctx.clearRect(0, 0, w, h);
+                particles.forEach(p => { p.update(); p.draw(); });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+    </script>
 
 </body>
 </html>

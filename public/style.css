@@ -17,97 +17,309 @@ body {
 }
 
 /* =========================================================
-   DASHBOARD
+   FOND ANIMÉ (partagé login + dashboard)
    ========================================================= */
 
-body:not(.login-body) {
-    background: #0f172a;
-    color: #e2e8f0;
+.bg-anim {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridDrift 25s linear infinite;
+}
+
+@keyframes gridDrift {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+.bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.2;
+    animation: orbFloat 18s ease-in-out infinite;
+}
+
+.bg-orb-1 {
+    width: 350px;
+    height: 350px;
+    background: rgba(255, 160, 180, 0.6);
+    top: -80px;
+    left: -60px;
+}
+
+.bg-orb-2 {
+    width: 280px;
+    height: 280px;
+    background: rgba(80, 120, 220, 0.5);
+    bottom: -60px;
+    right: -40px;
+    animation-delay: -8s;
+}
+
+.bg-orb-3 {
+    width: 200px;
+    height: 200px;
+    background: rgba(200, 180, 255, 0.4);
+    top: 50%;
+    left: 60%;
+    animation-delay: -4s;
+    animation-duration: 22s;
+}
+
+@keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%      { transform: translate(25px, -18px) scale(1.06); }
+    66%      { transform: translate(-15px, 12px) scale(0.94); }
+}
+
+#particles {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* =========================================================
+   DASHBOARD — Thème pastel animé
+   ========================================================= */
+
+body.dashboard-body {
     min-height: 100vh;
+    padding: 40px 20px;
+    overflow-x: hidden;
 
     display: flex;
     justify-content: center;
     align-items: flex-start;
 
-    padding: 40px 20px;
+    background:
+        radial-gradient(circle at 15% 25%, rgba(255,190,190,.9), transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(52,97,197,.85), transparent 50%),
+        linear-gradient(
+            135deg,
+            #d8a5b2 0%,
+            #c29db6 40%,
+            #7a87bf 70%,
+            #4168b5 100%
+        );
 }
 
-.container {
+.dash-container {
+    position: relative;
+    z-index: 1;
     display: inline-flex;
     flex-direction: column;
     align-items: stretch;
     gap: 20px;
+
+    animation: wrapperEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.card {
-    background: #1e293b;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    width: 100%;
+@keyframes wrapperEnter {
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
+
+/* ── Carte principale ── */
+
+.dash-card {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    padding: 32px 36px;
+    border-radius: 24px;
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,0.15),
+        0 0 0 1px rgba(255,255,255,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Reflet lumineux */
+.dash-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        ellipse at 30% 20%,
+        rgba(255,255,255,0.12) 0%,
+        transparent 50%
+    );
+    pointer-events: none;
+}
+
+/* ── Header ── */
 
 .header-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.dash-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #053580, #032658);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    box-shadow: 0 4px 16px rgba(3,38,88,0.3);
 }
 
 h1 {
-    color: #38bdf8;
+    color: #1a3a6e;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin: 0;
 }
 
-p {
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
-
-.status {
-    display: inline-block;
-    padding: 8px 12px;
-    background: #22c55e;
-    color: white;
-    border-radius: 999px;
-    font-size: 14px;
-    margin-top: 10px;
-}
-
-footer {
-    margin-top: 20px;
+.header-sub {
     font-size: 12px;
-    opacity: 0.7;
+    color: #7a8aaa;
 }
+
+/* ── User info ── */
 
 .user-info {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #053580, #032658);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.85);
+    font-size: 16px;
 }
 
 .user-name {
     font-size: 14px;
-    color: #94a3b8;
+    color: #3a4a6a;
+    font-weight: 500;
 }
 
 .btn-logout {
-    padding: 6px 14px;
-    background: #334155;
-    color: #e2e8f0;
-    border-radius: 8px;
+    padding: 8px 16px;
+    background: rgba(5, 53, 128, 0.1);
+    color: #1a3a6e;
+    border-radius: 10px;
     text-decoration: none;
     font-size: 13px;
-    transition: background .2s ease;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .btn-logout:hover {
-    background: #475569;
+    background: rgba(5, 53, 128, 0.18);
+    transform: translateY(-1px);
+}
+
+.btn-logout i {
+    font-size: 12px;
+}
+
+/* ── Status bar ── */
+
+.dash-status-bar {
+    margin-bottom: 16px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: 999px;
+    font-size: 13px;
+    color: #166534;
+    font-weight: 500;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    }
+    50% {
+        opacity: 0.7;
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+}
+
+/* ── Footer ── */
+
+footer {
+    margin-top: 4px;
+    font-size: 11px;
+    color: #7a8aaa;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+footer i {
+    opacity: 0.6;
 }
 
 /* =========================================================
-   MINI CARDS
+   MINI CARDS — Glassmorphism enrichi
    ========================================================= */
 
 .cards {
@@ -118,40 +330,107 @@ footer {
 }
 
 .mini-card {
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    padding: 24px;
+    border-radius: 20px;
     width: 220px;
     text-decoration: none;
-    color: #e2e8f0;
-    box-shadow: 0 10px 30px rgba(0,0,0,.3);
-    transition: transform .2s ease, background .2s ease;
+    color: #1a3a6e;
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,0.12),
+        0 0 0 1px rgba(255,255,255,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+    position: relative;
+    overflow: hidden;
+}
+
+.mini-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        ellipse at 30% 20%,
+        rgba(255,255,255,0.1) 0%,
+        transparent 50%
+    );
+    pointer-events: none;
+    transition: opacity 0.3s;
+    opacity: 0;
 }
 
 .mini-card:hover {
-    transform: translateY(-5px);
-    background: #273449;
+    transform: translateY(-6px);
+    box-shadow:
+        0 25px 50px rgba(0,0,0,0.18),
+        0 0 0 1px rgba(255,255,255,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.mini-card:hover::before {
+    opacity: 1;
+}
+
+.mini-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #053580, #032658);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 12px rgba(3,38,88,0.25);
 }
 
 .mini-card h2 {
-    margin-bottom: 10px;
-    color: #38bdf8;
-    font-size: 18px;
+    margin: 0 0 6px 0;
+    color: #1a3a6e;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .mini-card p {
     margin: 0;
+    font-size: 12.5px;
+    color: #5a6a8a;
+    line-height: 1.4;
+}
+
+.mini-card-arrow {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    color: #8a9abc;
     font-size: 13px;
-    opacity: .8;
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition: all 0.3s ease;
+}
+
+.mini-card:hover .mini-card-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
 }
 
 .card,
 .cards {
-    width: calc((220px * 3) + (20px * 2));
+    width: calc((220px * 4) + (20px * 3));
 }
 
 /* =========================================================
-   LOGIN PAGE
+   LOGIN PAGE — Fond animé + Glassmorphism enrichi
    ========================================================= */
 
 body.login-body {
@@ -176,43 +455,86 @@ body.login-body {
         );
 }
 
-/* Wrapper spécifique au login */
+/* ── Wrapper ── */
 
 .login-wrapper {
     position: relative;
-    width: 360px;
+    z-index: 1;
+    width: 380px;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    animation: loginEnter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes loginEnter {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* =========================================================
-   AVATAR
+   AVATAR + ANNEAU LUMINEUX
    ========================================================= */
 
-.avatar {
+.avatar-ring {
     position: absolute;
-    top: -50px;
+    top: -55px;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 20;
 
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+    box-shadow:
+        0 0 0 0 rgba(255,255,255,0.2),
+        0 12px 40px rgba(0,0,0,0.15);
+
+    animation: ringPulse 3s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+    0%, 100% {
+        box-shadow:
+            0 0 0 0 rgba(255,255,255,0.2),
+            0 12px 40px rgba(0,0,0,0.15);
+    }
+    50% {
+        box-shadow:
+            0 0 0 14px rgba(255,255,255,0),
+            0 12px 40px rgba(0,0,0,0.15);
+    }
+}
+
+.avatar {
     width: 100px;
     height: 100px;
-
     border-radius: 50%;
-    background: #032f74;
+    background: linear-gradient(145deg, #053580, #032658);
 
     display: flex;
     justify-content: center;
     align-items: center;
 
     color: white;
-    font-size: 42px;
-
-    z-index: 20;
+    font-size: 40px;
 
     box-shadow:
-        0 12px 30px rgba(0,0,0,.15);
+        0 4px 20px rgba(0,0,0,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 /* =========================================================
@@ -222,17 +544,55 @@ body.login-body {
 .login-card {
     width: 100%;
 
-    padding: 80px 38px 40px;
+    padding: 85px 38px 42px;
 
-    border-radius: 30px;
+    border-radius: 28px;
 
-    background: rgba(255,255,255,.72);
-
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 
     box-shadow:
-        0 20px 40px rgba(0,0,0,.15);
+        0 25px 50px rgba(0,0,0,0.18),
+        0 0 0 1px rgba(255,255,255,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* Reflet lumineux en haut */
+.login-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        ellipse at 30% 20%,
+        rgba(255,255,255,0.15) 0%,
+        transparent 50%
+    );
+    pointer-events: none;
+}
+
+/* ── Titres login ── */
+
+.login-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a3a6e;
+    margin-bottom: 4px;
+    letter-spacing: -0.3px;
+}
+
+.login-subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #6a7a9a;
+    margin-bottom: 28px;
 }
 
 /* =========================================================
@@ -243,25 +603,37 @@ body.login-body {
     display: flex;
     overflow: hidden;
     margin-bottom: 16px;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.input-group:focus-within {
+    box-shadow:
+        0 4px 20px rgba(5, 53, 128, 0.25),
+        0 0 0 3px rgba(79, 104, 148, 0.3);
+    transform: translateY(-1px);
 }
 
 .input-group .icon {
     width: 50px;
-    height: 46px;
+    height: 48px;
 
-    background: #042f74;
+    background: linear-gradient(180deg, #063880, #032a62);
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    color: white;
+    color: rgba(255,255,255,0.85);
+    font-size: 15px;
 }
 
 .input-group input {
     flex: 1;
 
-    height: 46px;
+    height: 48px;
 
     border: none;
     outline: none;
@@ -272,10 +644,43 @@ body.login-body {
 
     color: white;
     font-size: 14px;
+    font-family: inherit;
+
+    transition: background 0.2s ease;
+}
+
+.input-group:focus-within input {
+    background: #3d5882;
 }
 
 .input-group input::placeholder {
-    color: rgba(255,255,255,.75);
+    color: rgba(255,255,255,.7);
+}
+
+/* Toggle password */
+.toggle-pwd {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 48px;
+    width: 44px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: rgba(255,255,255,0.5);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.toggle-pwd:hover {
+    color: rgba(255,255,255,0.9);
+}
+
+.input-group:has(#password) {
+    position: relative;
 }
 
 /* =========================================================
@@ -297,19 +702,28 @@ body.login-body {
     display: flex;
     align-items: center;
     gap: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.remember input[type="checkbox"] {
+    accent-color: #053580;
+    cursor: pointer;
 }
 
 .options a {
     text-decoration: none;
     color: #666;
+    transition: color 0.2s;
 }
 
 .options a:hover {
+    color: #053580;
     text-decoration: underline;
 }
 
 /* =========================================================
-   BOUTON
+   BOUTON LOGIN
    ========================================================= */
 
 .login-btn {
@@ -319,41 +733,180 @@ body.login-body {
     margin-top: 28px;
 
     border: none;
-    border-radius: 18px;
+    border-radius: 16px;
 
-    background: white;
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
     color: #214886;
 
     font-weight: bold;
+    font-size: 15px;
+    font-family: inherit;
     letter-spacing: 2px;
 
     cursor: pointer;
 
     box-shadow:
-        0 10px 20px rgba(0,0,0,.15);
+        0 10px 25px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.8);
 
     transition: all .25s ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.login-btn i {
+    font-size: 14px;
+    transition: transform 0.3s ease;
 }
 
 .login-btn:hover {
-    transform: translateY(-2px);
-
+    transform: translateY(-3px);
     box-shadow:
-        0 15px 30px rgba(0,0,0,.20);
+        0 18px 40px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    background: linear-gradient(135deg, #ffffff, #e8e8e8);
+}
+
+.login-btn:hover i {
+    transform: translateX(4px);
+}
+
+.login-btn:active {
+    transform: translateY(-1px);
 }
 
 /* =========================================================
-   SERVER INFO
+   SERVER INFO (login footer)
    ========================================================= */
 
 .server-info {
-    margin-top: 25px;
+    margin-top: 28px;
     text-align: center;
 
-    color: rgba(255,255,255,.85);
+    color: rgba(255,255,255,.75);
 
     font-size: 11px;
     letter-spacing: .5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.server-info i {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* =========================================================
+   RESET PASSWORD PAGE
+   ========================================================= */
+
+.msg-success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    border-radius: 12px;
+    color: #166534;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    animation: fadeIn 0.4s ease;
+}
+
+.msg-success i {
+    font-size: 16px;
+    color: #22c55e;
+}
+
+.match-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    padding: 0 4px;
+    margin-top: -6px;
+    margin-bottom: 10px;
+    animation: fadeIn 0.25s ease;
+}
+
+.match-indicator.match-ok {
+    color: #16a34a;
+}
+
+.match-indicator.match-ko {
+    color: #dc2626;
+}
+
+.match-indicator i {
+    font-size: 12px;
+}
+
+.reset-back {
+    text-align: center;
+    margin-top: 18px;
+}
+
+.reset-back a {
+    font-size: 13px;
+    color: #5a6a8a;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+
+.reset-back a:hover {
+    color: #1a3a6e;
+}
+
+.reset-back a i {
+    font-size: 11px;
+}
+
+/* ── Dashboard: bouton changer MDP ── */
+
+.btn-change-pwd {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(5, 53, 128, 0.1);
+    color: #1a3a6e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.btn-change-pwd:hover {
+    background: rgba(5, 53, 128, 0.18);
+    transform: translateY(-1px);
+}
+
+.user-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.user-role {
+    font-size: 11px;
+    color: #7a8aaa;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* =========================================================
@@ -381,21 +934,46 @@ body.login-body {
         flex-direction: column;
         text-align: center;
     }
+
+    .header-left {
+        justify-content: center;
+    }
+
+    .user-info {
+        justify-content: center;
+    }
+
+    .dash-card {
+        padding: 24px 20px;
+    }
 }
 
 @media (max-width: 420px) {
 
     .login-wrapper {
-        width: calc(100vw - 40px);
+        width: calc(100vw - 32px);
     }
 
     .login-card {
-        padding: 80px 24px 35px;
+        padding: 80px 22px 32px;
+        border-radius: 22px;
     }
 
     .options {
         flex-direction: column;
         gap: 10px;
         align-items: flex-start;
+    }
+
+    .avatar-ring {
+        width: 95px;
+        height: 95px;
+        top: -48px;
+    }
+
+    .avatar {
+        width: 85px;
+        height: 85px;
+        font-size: 34px;
     }
 }
